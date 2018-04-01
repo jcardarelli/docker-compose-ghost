@@ -1,0 +1,10 @@
+# site FQDN
+virtual_host: example.com
+
+# Let's Encrypt Certificates
+letsencrypt_path: /apps/web/ssl
+letsencrypt_email: you@example.com
+
+# Maria DB
+mariadb_user: bn_ghost
+mariadb_database: bitnami_ghost
