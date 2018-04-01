@@ -1,0 +1,26 @@
+---
+- name: Install Ghost blogging stack on Docker
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Include variables from vars.yml
+      include_vars: vars.yml
+
+    - name: Write docker-compose.yml file from template
+      template:
+        src: docker-compose.yml.j2
+        dest: "{{ playbook_dir }}/docker-compose.yml"
+
+    # The docker_service module will find the docker-compose.yml file in the playbook directory
+    - name: Provision contents of docker compose file
+      docker_service:
+        project_src: "{{ playbook_dir }}"
+      register: docker_compose_output
+
+    - name: Wait 300 seconds to ensure that "{{ virtual_host }}" is accessible
+      wait_for:
+        host: "{{ virtual_host }}"
+        port: 443
+...
