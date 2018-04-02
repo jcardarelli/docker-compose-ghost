@@ -1,0 +1,55 @@
+version: '2'  
+services:  
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+      - {{ letsencrypt_path }}:/etc/nginx/certs:ro
+
+  ssl-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: ssl-companion
+    volumes:
+      - {{ letsencrypt_path }}:/etc/nginx/certs:rw
+    volumes_from:
+      - nginx-proxy
+    depends_on:
+      - nginx-proxy
+
+  database:
+    image: bitnami/mariadb:latest
+    container_name: ghost-db
+    environment:
+      - MARIADB_ROOT_PASSWORD={{ mariadb_root_password }}
+      - MARIADB_USER={{ mariadb_user }}
+      - MARIADB_PASSWORD={{ ghost_database_password }}
+      - MARIADB_DATABASE={{ mariadb_database }}
+
+  ghost:
+    image: bitnami/ghost:latest
+    container_name: ghost-blog
+    expose:
+      - '2368'
+    depends_on:
+      - database
+    environment:
+      - MARIADB_HOST=database
+      - MARIADB_PORT_NUMBER=3306
+      - BLOG_TITLE={{ ghost_blog_title }}
+      - GHOST_DATABASE_PASSWORD={{ ghost_database_password }}
+      - GHOST_EMAIL={{ letsencrypt_email }}
+      - GHOST_HOST={{ virtual_host }}
+      - GHOST_PORT_NUMBER=443
+      - LETSENCRYPT_EMAIL={{ letsencrypt_email }}
+      - LETSENCRYPT_HOST={{ virtual_host }}
+      - MYSQL_CLIENT_CREATE_DATABASE_NAME={{ mariadb_database }}
+      - MYSQL_CLIENT_CREATE_DATABASE_USER={{ mariadb_user }}
+      - MYSQL_CLIENT_CREATE_DATABASE_PASSWORD={{ ghost_database_password }}
+      - VIRTUAL_HOST={{ virtual_host }}
