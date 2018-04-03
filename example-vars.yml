@@ -8,3 +8,43 @@ letsencrypt_email: you@example.com
 # Maria DB
 mariadb_user: bn_ghost
 mariadb_database: bitnami_ghost
+
+
+# User and Site configuration
+#############################
+# GHOST_HOST: Hostname for Ghost.
+# GHOST_PORT_NUMBER: Port number used in the generated application URLs. Default: 80
+# GHOST_USERNAME: Ghost application username. Default: user
+# GHOST_PASSWORD: Ghost application password. Minimum length is 10 characters. Default: bitnami123
+# GHOST_EMAIL: Ghost application email. Default: **user@example.com**
+# BLOG_TITLE: Ghost blog title. Default: User's Blog
+
+# Use an existing database
+##########################
+# MARIADB_HOST: Hostname for MariaDB server. Default: mariadb
+# MARIADB_PORT_NUMBER: Port used by MariaDB server. Default: 3306
+# GHOST_DATABASE_NAME: Database name that Ghost will use to connect with the database. Default: bitnami_ghost
+# GHOST_DATABASE_USER: Database user that Ghost will use to connect with the database. Default: bn_ghost
+# GHOST_DATABASE_PASSWORD: Database password that Ghost will use to connect with the database. No defaults.
+# ALLOW_EMPTY_PASSWORD: It can be used to allow blank passwords. Default: no
+
+# Create a database for Ghost using mysql-client
+################################################
+# MARIADB_HOST: Hostname for MariaDB server. Default: mariadb
+# MARIADB_PORT_NUMBER: Port used by MariaDB server. Default: 3306
+# MARIADB_ROOT_USER: Database admin user. Default: root
+# MARIADB_ROOT_PASSWORD: Database password for the MARIADB_ROOT_USER user. No defaults.
+# MYSQL_CLIENT_CREATE_DATABASE_NAME: New database to be created by the mysql client module. No defaults.
+# MYSQL_CLIENT_CREATE_DATABASE_USER: New database user to be created by the mysql client module. No defaults.
+# MYSQL_CLIENT_CREATE_DATABASE_PASSWORD: Database password for the MYSQL_CLIENT_CREATE_DATABASE_USER user. No defaults.
+# ALLOW_EMPTY_PASSWORD: It can be used to allow blank passwords. Default: no
+
+# SMTP Configuration
+####################
+# To configure Ghost to send email using SMTP you can set the following environment variables:
+# 
+# SMTP_HOST: SMTP host.
+# SMTP_PORT: SMTP port.
+# SMTP_USER: SMTP account user.
+# SMTP_PASSWORD: SMTP account password.
+# SMTP_SERVICE: SMTP service to use.
