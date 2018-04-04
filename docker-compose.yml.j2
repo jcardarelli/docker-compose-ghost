@@ -3,6 +3,7 @@ services:
   nginx-proxy:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
+    restart: always
     ports:
       - '80:80'
       - '443:443'
@@ -18,6 +19,7 @@ services:
     container_name: ssl-companion
     volumes:
       - {{ letsencrypt_path }}:/etc/nginx/certs:rw
+    restart: always
     volumes_from:
       - nginx-proxy
     depends_on:
@@ -26,11 +28,14 @@ services:
   database:
     image: bitnami/mariadb:latest
     container_name: ghost-db
+    restart: always
     environment:
       - MARIADB_ROOT_PASSWORD={{ mariadb_root_password }}
       - MARIADB_USER={{ mariadb_user }}
       - MARIADB_PASSWORD={{ ghost_database_password }}
       - MARIADB_DATABASE={{ mariadb_database }}
+    volumes:
+      - {{ local_database_data_dir }}:/bitnami
 
   ghost:
     image: bitnami/ghost:latest
@@ -39,17 +44,20 @@ services:
       - '2368'
     depends_on:
       - database
+    restart: always
     environment:
+      - NODE_ENV=development
       - MARIADB_HOST=database
       - MARIADB_PORT_NUMBER=3306
+      - MARIADB_USER={{ mariadb_user }}
       - BLOG_TITLE={{ ghost_blog_title }}
       - GHOST_DATABASE_PASSWORD={{ ghost_database_password }}
-      - GHOST_EMAIL={{ letsencrypt_email }}
       - GHOST_HOST={{ virtual_host }}
       - GHOST_PORT_NUMBER=443
+      - GHOST_EMAIL={{ letsencrypt_email }}
+      - GHOST_PASSWORD={{ ghost_password }}
       - LETSENCRYPT_EMAIL={{ letsencrypt_email }}
       - LETSENCRYPT_HOST={{ virtual_host }}
-      - MYSQL_CLIENT_CREATE_DATABASE_NAME={{ mariadb_database }}
-      - MYSQL_CLIENT_CREATE_DATABASE_USER={{ mariadb_user }}
-      - MYSQL_CLIENT_CREATE_DATABASE_PASSWORD={{ ghost_database_password }}
       - VIRTUAL_HOST={{ virtual_host }}
+    volumes:
+      - {{ local_ghost_data_dir }}:/bitnami
