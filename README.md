@@ -1,2 +1,11 @@
 # docker-compose-ghost
-Docker Compose file for building a Ghost deployment on Docker. Bitnami mariadb and ghost images for a real database container. Auto-TLS handled by nginx-proxy, and ssl-companion.
+Use `ghost-stack.yml` playbook to write template and run docker-compose file for a new Ghost deployment on Docker. 
+
+## Setup
+1. `cp example-vars.yml vars.yml`
+1. Change variables in vars.yml to suit your project.
+
+## Run Playbook
+This will generate (and execute) the docker-compose.yml file.
+
+`ansible-playbook ghost-stack.yml`
