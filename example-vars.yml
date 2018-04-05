@@ -5,10 +5,21 @@ virtual_host: example.com
 letsencrypt_path: /apps/web/ssl
 letsencrypt_email: you@example.com
 
+# Ghost
+local_ghost_data_dir: app_data/ghost
+ghost_blog_title: "Blog Title"
+ghost_database_password: long_complicated_password
+ghost_username: ghost_user
+ghost_password: long_complicated_password
+
 # Maria DB
 mariadb_user: bn_ghost
 mariadb_database: bitnami_ghost
+mariadb_root_password: long_complicated_password
+local_database_data_dir: app_data/mariadb
 
+# Variable list from ghost docker docs:
+#######################################
 
 # User and Site configuration
 #############################
